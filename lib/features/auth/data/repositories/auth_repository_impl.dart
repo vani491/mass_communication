@@ -1,7 +1,9 @@
  //Handles Firebase registration and Firestore
  //The repository is where Firebase Authentication and Firestore interaction is managed.
 
- import 'package:firebase_auth/firebase_auth.dart';
+ import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
  import 'package:cloud_firestore/cloud_firestore.dart';
  import 'package:flutter/services.dart';
 
@@ -15,6 +17,7 @@
      required String mobileNumber,
      required String email,
      required String password,
+     required String role,
    }) async {
      try {
        // 1. Register user with email & password using Firebase Auth
@@ -28,11 +31,14 @@
 
        // 3. Store additional user information (name, mobileNumber) in Firestore
        await _firestore.collection('users').doc(uid).set({
-         'name': name,
-         'mobileNumber': mobileNumber,
-         'email': email,
-         'uid': uid,
-         'createdAt': FieldValue.serverTimestamp(),  // Store the time of registration
+         'User Name': name,
+         'Mobile Number': mobileNumber,
+         'Email': email,
+         'Id': uid,
+         'Created At': FieldValue.serverTimestamp(),
+         'Password' : password,
+         'Role': role
+
        });
      } on FirebaseAuthException catch (e) {
        // Handle Firebase Auth errors (e.g., email already in use)

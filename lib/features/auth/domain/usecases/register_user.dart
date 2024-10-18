@@ -1,5 +1,7 @@
 // Use case to trigger user registration
 
+import 'dart:async';
+
 import '../../data/repositories/auth_repository_impl.dart';
 
 class RegisterUser {
@@ -13,12 +15,14 @@ class RegisterUser {
     required String mobileNumber,
     required String email,
     required String password,
+    required String role,
   }) async {
     await authRepository.registerUser(
       name: name,
       mobileNumber: mobileNumber,
       email: email,
       password: password,
+      role:role,
     );
   }
 }

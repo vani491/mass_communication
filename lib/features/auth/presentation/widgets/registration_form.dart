@@ -1,6 +1,7 @@
 //The form widget for user registration
 import 'package:flutter/material.dart';
 
+import '../../../../reusable_widget/LoadingIndicator.dart';
 import '../../domain/usecases/register_user.dart';
 
 
@@ -21,65 +22,137 @@ class _RegistrationFormState extends State<RegistrationForm> {
   String _mobileNumber = '';
   String _email = '';
   String _password = '';
+  String _selectedRole = 'Attendee';
 
   bool _isNameValid = true;
   bool _isMobileValid = true;
   bool _isEmailValid = true;
   bool _isPasswordValid = true;
 
-  // Method to validate and submit the form
-  void _submit() async {
-    // First, validate the Name field
+  // Method to handle role selection
+  void _handleRoleChange(String? value) {
+    setState(() {
+      _selectedRole = value!;
+    });
+  }
+
+  // Method to validate all fields
+  bool _validateFields() {
     if (_name.isEmpty) {
       setState(() {
         _isNameValid = false;
       });
-      return;  // Stop further validation
+      return false;
     }
 
-    // If Name is valid, validate the Mobile Number field
     if (_mobileNumber.isEmpty || _mobileNumber.length != 10) {
       setState(() {
         _isMobileValid = false;
       });
-      return;  // Stop further validation
+      return false;
     }
 
-    // If Mobile Number is valid, validate the Email field
     if (_email.isEmpty || !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(_email)) {
       setState(() {
         _isEmailValid = false;
       });
-      return;  // Stop further validation
+      return false;
     }
 
-    // If Email is valid, validate the Password field
     if (_password.isEmpty || _password.length < 6) {
       setState(() {
         _isPasswordValid = false;
       });
-      return;  // Stop further validation
+      return false;
     }
 
-    // If all fields are valid, save the form
-    _formKey.currentState!.save();
+    return true;
+  }
+
+  // Method to reset the form and fields
+  void _resetForm() {
+    _formKey.currentState!.reset();
+    setState(() {
+      _name = '';
+      _mobileNumber = '';
+      _email = '';
+      _password = '';
+      _isNameValid = true;
+      _isMobileValid = true;
+      _isEmailValid = true;
+      _isPasswordValid = true;
+    });
+  }
+
+  // Method to handle user registration
+  Future<void> _handleRegistration() async {
+    // Show loading indicator
+    _showLoadingIndicator();
+
     try {
       await widget.registerUser.call(
         name: _name,
         mobileNumber: _mobileNumber,
         email: _email,
         password: _password,
+        role: _selectedRole,
       );
 
-      // Show success message or navigate to another screen
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User registered successfully')));
+      // Dismiss loading indicator
+      Navigator.of(context).pop();
+
+      // Clear the form and reset all fields
+      _resetForm();
+
+      // Show success snackbar with green background and icon
+      _showSuccessSnackbar();
     } catch (e) {
+      // Dismiss loading indicator
+      Navigator.of(context).pop();
+
       // Handle registration errors
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
+  // Method to show loading indicator
+  void _showLoadingIndicator() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: LoadingIndicator(message: 'Registering...'),
+        );
+      },
+    );
+  }
 
+  // Method to show success snackbar
+  void _showSuccessSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.check_circle, color: Colors.white),
+            SizedBox(width: 10),  // Spacing between icon and text
+            Text('User registered successfully'),
+          ],
+        ),
+        backgroundColor: Colors.green,  // Green background color for success
+        behavior: SnackBarBehavior.floating,  // Optional: Make the snackbar floating
+      ),
+    );
+  }
+
+  // Main submit method
+  void _submit() async {
+    if (_validateFields()) {
+      _formKey.currentState!.save();
+      await _handleRegistration();
+    }
+  }
 
   // Method to remove the error when typing
   void _resetErrorState(String field) {
@@ -209,6 +282,37 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 onSaved: (value) {
                   _password = value ?? '';
                 },
+              ),
+              SizedBox(height: 10),
+
+              // Add Role Selection Radio Buttons (Horizontal Layout)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1.0),
+                child: Text(
+                  'Register as:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text('Attendee'),
+                      value: 'Attendee',
+                      groupValue: _selectedRole,
+                      onChanged: _handleRoleChange,
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text('Organizer'),
+                      value: 'Organizer',
+                      groupValue: _selectedRole,
+                      onChanged: _handleRoleChange,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 30),
 

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/usecases/login_user.dart';
 import '../widgets/login_form.dart';
 
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final loginUser = LoginUser();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -20,7 +22,7 @@ class LoginPage extends StatelessWidget {
         ),
         child:  Padding(
           padding: const EdgeInsets.all(16.0),
-          child: LoginForm(), // Call to the LoginForm widget
+          child: LoginForm(loginUser: loginUser), // Call to the LoginForm widget
         ),
       ),
     );
