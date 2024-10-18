@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "261802239818",
+    "project_id": "smart-connect-58bff",
+    "storage_bucket": "smart-connect-58bff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261802239818:android:785bfb5355fc1ccb5bc3b3",
+        "android_client_info": {
+          "package_name": "com.info.mass_communication.mass_communication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApQJjbLzxAk-l_EtmVm_VYXcNXV41KIvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
