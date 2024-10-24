@@ -1,7 +1,7 @@
 //The form widget for user registration
 import 'package:flutter/material.dart';
 
-import '../../../../reusable_widget/LoadingIndicator.dart';
+import '../../../../reusable_widget/loading_indicator.dart';
 import '../../domain/usecases/register_user.dart';
 
 
@@ -9,13 +9,13 @@ class RegistrationForm extends StatefulWidget {
 
   final RegisterUser registerUser;
 
-  RegistrationForm({required this.registerUser});
+  const RegistrationForm({super.key, required this.registerUser});
 
   @override
-  _RegistrationFormState createState() => _RegistrationFormState();
+  RegistrationFormState createState() => RegistrationFormState();
 }
 
-class _RegistrationFormState extends State<RegistrationForm> {
+class RegistrationFormState extends State<RegistrationForm> {
   final _formKey = GlobalKey<FormState>();
 
   String _name = '';
@@ -98,22 +98,33 @@ class _RegistrationFormState extends State<RegistrationForm> {
         role: _selectedRole,
       );
 
-      // Dismiss loading indicator
-      Navigator.of(context).pop();
+      // Dismiss loading indicator only if mounted
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
 
       // Clear the form and reset all fields
       _resetForm();
 
-      // Show success snackbar with green background and icon
-      _showSuccessSnackbar();
+      // Show success snackbar with green background and icon, only if mounted
+      if (mounted) {
+        _showSuccessSnackbar();
+      }
     } catch (e) {
-      // Dismiss loading indicator
-      Navigator.of(context).pop();
+      // Dismiss loading indicator only if mounted
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
 
-      // Handle registration errors
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      // Handle registration errors only if mounted
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
     }
   }
+
 
   // Method to show loading indicator
   void _showLoadingIndicator() {
@@ -121,7 +132,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Dialog(
+        return const Dialog(
           backgroundColor: Colors.transparent,
           child: LoadingIndicator(message: 'Registering...'),
         );
@@ -132,7 +143,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   // Method to show success snackbar
   void _showSuccessSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Row(
           children: [
             Icon(Icons.check_circle, color: Colors.white),
@@ -201,7 +212,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 decoration: InputDecoration(
                   labelText: 'Name',
                   errorText: _isNameValid ? null : 'Please enter your name',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   _name = value;
@@ -214,7 +225,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   _name = value ?? '';
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Mobile Number Field
               TextFormField(
@@ -224,7 +235,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   errorText: _isMobileValid
                       ? null
                       : 'Please enter a valid mobile number',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   _mobileNumber = value;
@@ -237,7 +248,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   _mobileNumber = value ?? '';
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Email Field
               TextFormField(
@@ -247,7 +258,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   errorText: _isEmailValid
                       ? null
                       : 'Please enter a valid email address',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   _email = value;
@@ -260,7 +271,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   _email = value ?? '';
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Password Field
               TextFormField(
@@ -270,7 +281,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   errorText: _isPasswordValid
                       ? null
                       : 'Password must be at least 6 characters',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   _password = value;
@@ -283,54 +294,87 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   _password = value ?? '';
                 },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-              // Add Role Selection Radio Buttons (Horizontal Layout)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 1.0),
+              // Role Selection Section in the RegistrationForm
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   'Register as:',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,  // Evenly distribute the radio buttons
                 children: [
-                  Expanded(
-                    child: RadioListTile<String>(
-                      title: const Text('Attendee'),
-                      value: 'Attendee',
-                      groupValue: _selectedRole,
-                      onChanged: _handleRoleChange,
+                  // Custom Container for Attendee
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedRole = 'Attendee';
+                        });
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Radio<String>(
+                            value: 'Attendee',
+                            groupValue: _selectedRole,
+                            onChanged: _handleRoleChange,
+                          ),
+                          const Text('Attendee'),
+                        ],
+                      ),
                     ),
                   ),
-                  Expanded(
-                    child: RadioListTile<String>(
-                      title: const Text('Organizer'),
-                      value: 'Organizer',
-                      groupValue: _selectedRole,
-                      onChanged: _handleRoleChange,
+
+                  // Add some space between the two options
+                  const SizedBox(width: 20),
+
+                  // Custom Container for Organizer
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedRole = 'Organizer';
+                        });
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Radio<String>(
+                            value: 'Organizer',
+                            groupValue: _selectedRole,
+                            onChanged: _handleRoleChange,
+                          ),
+                          const Text('Organizer'),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+
+
+
+              const SizedBox(height: 30),
 
               // Submit Button
               ElevatedButton(
                 onPressed: _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF04224C), // Custom button color
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
                 child: Text(
-                  'Register',
-                  style: TextStyle(
+                  'Register'.toUpperCase(),
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white, // Set text color to white
                     fontWeight: FontWeight.bold, // Make the text bold
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF04224C), // Custom button color
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  textStyle: TextStyle(fontSize: 16),
                 ),
               ),
             ],

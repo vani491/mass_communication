@@ -6,6 +6,8 @@ import '../widgets/registration_form.dart';
 
 
 class RegistrationPage extends StatelessWidget {
+  const RegistrationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
 

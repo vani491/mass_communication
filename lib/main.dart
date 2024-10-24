@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mass_communication/routes.dart';
+import 'package:mass_communication/navigation/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/firebase_options.dart';
 

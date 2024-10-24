@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../../../reusable_widget/LoadingIndicator.dart';
+import '../../../../reusable_widget/loading_indicator.dart';
 import '../../domain/usecases/login_user.dart';
 
 class LoginForm extends StatefulWidget {
   final LoginUser loginUser;
-  LoginForm({required this.loginUser});
+  const LoginForm({super.key, required this.loginUser});
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  LoginFormState createState() => LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   String _mobileNumber = '';
   String _password = '';
@@ -54,7 +54,7 @@ class _LoginFormState extends State<LoginForm> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Dialog(
+        return const Dialog(
           backgroundColor: Colors.transparent,
           child: LoadingIndicator(message: 'Logging in...'),
         );
@@ -65,7 +65,7 @@ class _LoginFormState extends State<LoginForm> {
   // Show success snackbar
   void _showSuccessSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Row(
           children: [
             Icon(Icons.check_circle, color: Colors.white),
@@ -75,11 +75,12 @@ class _LoginFormState extends State<LoginForm> {
         ),
         backgroundColor: Colors.green,
         behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 1),  // Show for 3 seconds
       ),
     );
   }
 
-  // Handle login process
+// Handle login process
   Future<void> _handleLogin() async {
     _showLoadingIndicator();
 
@@ -89,27 +90,40 @@ class _LoginFormState extends State<LoginForm> {
         password: _password,
       );
 
-      // Dismiss loading indicator
-      Navigator.of(context).pop();
+      // Dismiss loading indicator only if mounted
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
 
       // Clear the form
       _resetForm();
 
-      // Show success message
-      _showSuccessSnackbar();
+      // Show success message only if mounted
+      if (mounted) {
+        _showSuccessSnackbar();
+      }
 
-      // Navigate to home page (you can use Navigator here)
-      Navigator.pushReplacementNamed(context, '/home');  // Replace with your home route
+      // Wait for 3 seconds, then navigate to the home page
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+      });
     } catch (e) {
-      // Dismiss loading indicator
-      Navigator.of(context).pop();
+      // Dismiss loading indicator only if mounted
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
 
-      // Handle login errors
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      // Handle login errors only if mounted
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
     }
   }
+
 
   // Main submit function
   void _submit() async {
@@ -185,9 +199,9 @@ class _LoginFormState extends State<LoginForm> {
                     textStyle: const TextStyle(fontSize: 16),
                   ),
                   onPressed: _submit,  // Call the submit function
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
+                  child:  Text(
+                    'Login'.toUpperCase(),
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -209,9 +223,9 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () {
                     Navigator.of(context).pushNamed('/registration');
                   },
-                  child: const Text(
-                    'Register',
-                    style: TextStyle(
+                  child:  Text(
+                    'Register'.toUpperCase(),
+                    style: const TextStyle(
                       color: Color(0xFF04224C),
                     ),
                   ),

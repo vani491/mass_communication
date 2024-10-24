@@ -5,6 +5,8 @@ import '../widgets/login_form.dart';
 
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final loginUser = LoginUser();

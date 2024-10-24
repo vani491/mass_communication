@@ -24,7 +24,7 @@ class LoadingIndicator extends StatelessWidget {
               padding: const EdgeInsets.only(top: 16.0),
               child: Text(
                 message!,
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ),
         ],
