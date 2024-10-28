@@ -5,8 +5,9 @@ class Event {
   final String eventType;
   final DateTime date;
   final String location;
-  final String totalAttendees;
+  final int totalAttendees;
   final String eventStatus;
+  bool isRegistered;
 
   Event({
     required this.eventId,
@@ -16,6 +17,7 @@ class Event {
     required this.date,
     required this.location,
     required this.totalAttendees,
-    required this.eventStatus
+    required this.eventStatus,
+    required this.isRegistered,
   });
 }

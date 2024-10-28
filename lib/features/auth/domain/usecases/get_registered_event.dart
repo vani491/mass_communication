@@ -5,12 +5,12 @@ import '../../data/repositories/event_repository.dart';
 import '../entities/event.dart';
 
 
-class GetEvents {
+class GetRegisteredEvents {
   final EventRepository repository;
 
-  GetEvents({required this.repository});
+  GetRegisteredEvents({required this.repository});
 
   Future<Either<Failure, List<Event>>> call() {
-    return repository.getEvents();
+    return repository.getRegisteredEvents();
   }
 }

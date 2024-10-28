@@ -5,4 +5,5 @@ import '../../../../core/failure.dart';
 
 abstract class EventRepository {
   Future<Either<Failure, List<Event>>> getEvents();
+  Future<Either<Failure, List<Event>>> getRegisteredEvents();
 }

@@ -10,8 +10,9 @@ class EventModel extends Event {
     required String eventType,
     required DateTime date,
     required String location,
-    required String totalAttendees,
+    required int totalAttendees,
     required String eventStatus,
+    required bool isRegistered,
   }) : super(
     eventId: eventId,
     name: name,
@@ -20,7 +21,8 @@ class EventModel extends Event {
     date: date,
     location: location,
     totalAttendees: totalAttendees,
-    eventStatus: eventStatus
+    eventStatus: eventStatus,
+    isRegistered: isRegistered
   );
 
 
@@ -35,6 +37,7 @@ class EventModel extends Event {
       totalAttendees: data['Attendee_Registered'] ?? 0,
       location: data['Location'] ?? '',
       eventStatus: data['Status'] ?? '',
+      isRegistered: data['Is_Registered'] is bool ? data['Is_Registered'] : false,
     );
   }
 

@@ -85,7 +85,7 @@ class LoginFormState extends State<LoginForm> {
     _showLoadingIndicator();
 
     try {
-      await widget.loginUser.call(
+      String role = await widget.loginUser.loginUserWithRole(
         mobileNumber: _mobileNumber,
         password: _password,
       );
@@ -106,7 +106,13 @@ class LoginFormState extends State<LoginForm> {
       // Wait for 3 seconds, then navigate to the home page
       Future.delayed(const Duration(seconds: 3), () {
         if (mounted) {
-          Navigator.pushReplacementNamed(context, '/home');
+          // Based on the role, navigate to different screens or perform role-based actions
+          if (role == 'Organizer') {
+            Navigator.pushReplacementNamed(context, '/organizerHome');
+          } else {
+            Navigator.pushReplacementNamed(context, '/attendeeHome');
+          }
+
         }
       });
     } catch (e) {
@@ -205,6 +211,7 @@ class LoginFormState extends State<LoginForm> {
                       fontSize: 16,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                        fontFamily: 'Roboto'
                     ),
                   ),
                 ),
@@ -227,6 +234,7 @@ class LoginFormState extends State<LoginForm> {
                     'Register'.toUpperCase(),
                     style: const TextStyle(
                       color: Color(0xFF04224C),
+                        fontFamily: 'Roboto'
                     ),
                   ),
                 ),

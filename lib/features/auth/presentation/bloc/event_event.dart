@@ -8,3 +8,5 @@ abstract class EventEvent extends Equatable {
 }
 
 class LoadEventsEvent extends EventEvent {}
+
+class LoadRegisteredEvents extends EventEvent {}

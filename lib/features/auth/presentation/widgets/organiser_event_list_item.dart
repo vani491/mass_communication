@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mass_communication/core/utils.dart';
 import '../../domain/usecases/register_event_use_case.dart';
+import '../pages/organiser/event_create_page.dart';
 
 // Main Event List Item Widget
-class EventListItem extends StatefulWidget {
+class OrganiserEventListItem extends StatefulWidget {
   final String date;
   final String month;
   final String status;
@@ -16,7 +17,7 @@ class EventListItem extends StatefulWidget {
   final String location;
   final bool isRegistered;
 
-  const EventListItem({
+  const OrganiserEventListItem({
     super.key,
     required this.date,
     required this.month,
@@ -31,53 +32,14 @@ class EventListItem extends StatefulWidget {
   });
 
   @override
-  _EventListItemState createState() => _EventListItemState();
+  OrganiserEventListItemState createState() => OrganiserEventListItemState();
 }
 
-class _EventListItemState extends State<EventListItem> {
-  late bool isRegistered;
-
+class OrganiserEventListItemState extends State<OrganiserEventListItem> {
   @override
   void initState() {
     super.initState();
     // Initialize the local variable with the widget property
-    isRegistered = widget.isRegistered;
-  }
-
-  // Method to handle event registration and provide feedback to the user
-  Future<void> _handleEventRegistration(
-      String eventId, String eventName) async {
-    // Show loading indicator
-    Util.showLoadingIndicator(context, "Registering...");
-
-    final registerUseCase = RegisterForEventUseCase();
-    String result = await registerUseCase.register(eventId, eventName);
-
-    // Dismiss loading indicator only if mounted
-    if (mounted) {
-      Navigator.of(context).pop();
-    }
-
-    // Show success or error message to the user
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(result),
-        backgroundColor:
-            result.contains('successful') ? Colors.green : Colors.red,
-      ),
-    );
-
-    // Update registration status if successful
-    if (result.contains('successful')) {
-      setState(() {
-        isRegistered = true;
-      });
-
-      // Increment Attendee_Registered in Firestore
-       await FirebaseFirestore.instance.collection('events').doc(widget.eventId).update({
-        'Attendee_Registered': FieldValue.increment(1),
-      });
-    }
   }
 
   @override
@@ -121,14 +83,20 @@ class _EventListItemState extends State<EventListItem> {
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  onPressed: isRegistered
-                      ? null
-                      : () async {
-                          await _handleEventRegistration(
-                              widget.eventId, widget.eventName);
-                        },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EventCreatePage(
+                          key: widget.key,
+                          controller: null,
+
+                        ),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isRegistered ? Colors.grey : Colors.green,
+                    backgroundColor: Colors.blue,
                     // Button color
                     padding: const EdgeInsets.only(
                         top: 0, bottom: 0, left: 12, right: 12),
@@ -136,9 +104,9 @@ class _EventListItemState extends State<EventListItem> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  child: Text(
-                    isRegistered ? 'Already Registered' : 'Register Here >>',
-                    style: const TextStyle(
+                  child: const Text(
+                    'Update Event',
+                    style: TextStyle(
                         fontSize: 12,
                         color: Colors.white,
                         fontFamily: 'Roboto'),
@@ -277,12 +245,14 @@ class EventDetailsSection extends StatelessWidget {
               child: Text(
                 location,
                 style: const TextStyle(
-                    fontSize: 12, color: Color(0xFF3D3D3D), fontFamily: 'Roboto'),
+                    fontSize: 12,
+                    color: Color(0xFF3D3D3D),
+                    fontFamily: 'Roboto'),
                 maxLines: 2, // Limit to one line
-                overflow: TextOverflow.ellipsis, // Add ellipsis if the text overflows
+                overflow:
+                    TextOverflow.ellipsis, // Add ellipsis if the text overflows
               ),
             )
-
           ],
         ),
       ],

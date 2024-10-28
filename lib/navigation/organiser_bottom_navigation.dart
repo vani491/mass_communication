@@ -2,18 +2,11 @@ import 'dart:developer';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // Import BlocProvider
-import 'package:mass_communication/features/auth/presentation/pages/home_page.dart';
-import 'package:mass_communication/features/auth/presentation/bloc/event_bloc.dart';  // Import EventBloc
-import 'package:mass_communication/features/auth/presentation/bloc/event_event.dart';  // Import EventEvent
-
-import 'package:mass_communication/features/auth/domain/usecases/get_events.dart';  // Import GetEvents
-import '../features/auth/data/datasources/event_datasource.dart';
-import '../features/auth/data/repositories/event_repository_impl.dart';
-import '../features/auth/presentation/pages/my_events_page.dart';
-import '../features/auth/presentation/pages/notification_page.dart';
-import '../features/auth/presentation/pages/organiser_home_page.dart';
-import '../features/auth/presentation/pages/profile_page.dart';
+import '../features/auth/presentation/pages/attendee/my_events_page.dart';
+import '../features/auth/presentation/pages/attendee/notification_page.dart';
+import '../features/auth/presentation/pages/organiser/event_create_page.dart';
+import '../features/auth/presentation/pages/organiser/event_list.dart';
+import '../features/auth/presentation/pages/attendee/profile_page.dart';
 
 class OrganiserBottomNavigation extends StatefulWidget {
   const OrganiserBottomNavigation({Key? key}) : super(key: key);
@@ -42,8 +35,9 @@ class _MyHomePageState extends State<OrganiserBottomNavigation> {
 
     /// widget list
     final List<Widget> bottomBarPages = [
-      OrganiserHomePage(controller: _controller),
-      const MyEventsPage(),
+
+      EventCreatePage(controller: _controller),
+      const EventListPage(),
       const NotificationPage(),
       const ProfilePage(),
     ];
@@ -55,8 +49,7 @@ class _MyHomePageState extends State<OrganiserBottomNavigation> {
         children: List.generate(bottomBarPages.length, (index) => bottomBarPages[index]),
       ),
       extendBody: true,
-      bottomNavigationBar: (bottomBarPages.length <= maxCount)
-          ? AnimatedNotchBottomBar(
+      bottomNavigationBar: (bottomBarPages.length <= maxCount) ? AnimatedNotchBottomBar(
         /// Provide NotchBottomBarController
         notchBottomBarController: _controller,
         color: const Color(0xFFb8c7d4),
@@ -64,7 +57,8 @@ class _MyHomePageState extends State<OrganiserBottomNavigation> {
         textOverflow: TextOverflow.visible,
         maxLine: 1,
         shadowElevation: 5,
-        kBottomRadius: 28.0,
+        kBottomRadius: 15.0,
+
         notchColor: const Color(0xFF04224c),
         /// restart app if you change removeMargins
         removeMargins: false,

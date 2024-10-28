@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../core/user_preference.dart';
+
 class LoginUser {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> call({
+  Future<String> loginUserWithRole({
     required String mobileNumber,
     required String password,
   }) async {
@@ -21,8 +23,18 @@ class LoginUser {
         throw Exception('Invalid mobile number or password');
       }
 
-      // 3. User exists, proceed to home page (handle navigation in UI)
-      return;  // If user exists, the caller will handle navigation
+      // 3. User exists, extract the role from the Firestore document
+      final userDoc = querySnapshot.docs.first;
+      final role = userDoc['Role'] as String;  // Assuming 'role' is stored as a string in Firestore
+      final userName = userDoc['User Name'] as String;  // Assuming 'Name' is stored as a string
+      final userMobileNumber = userDoc['Mobile Number'] as String;  // Assuming 'MobileNumber' is stored as a string
+      final userId = userDoc['Id'] as String;  // Assuming 'MobileNumber' is stored as a string
+
+      // Store extracted details in shared preferences
+      await UserPreferences.storeUserData(userName, userMobileNumber, role,userId);
+
+      // 4. Return the role to be used in the UI (or for any other logic)
+      return role;
     } catch (e) {
       throw Exception('Login failed: ${e.toString()}');
     }

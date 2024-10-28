@@ -3,16 +3,17 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Import BlocProvider
-import 'package:mass_communication/features/auth/presentation/pages/home_page.dart';
+import 'package:mass_communication/features/auth/presentation/pages/attendee/home_page.dart';
 import 'package:mass_communication/features/auth/presentation/bloc/event_bloc.dart';  // Import EventBloc
 import 'package:mass_communication/features/auth/presentation/bloc/event_event.dart';  // Import EventEvent
 
 import 'package:mass_communication/features/auth/domain/usecases/get_events.dart';  // Import GetEvents
 import '../features/auth/data/datasources/event_datasource.dart';
 import '../features/auth/data/repositories/event_repository_impl.dart';
-import '../features/auth/presentation/pages/my_events_page.dart';
-import '../features/auth/presentation/pages/notification_page.dart';
-import '../features/auth/presentation/pages/profile_page.dart';
+import '../features/auth/presentation/pages/attendee/my_events_page.dart';
+import '../features/auth/presentation/pages/attendee/notification_page.dart';
+import '../features/auth/presentation/pages/attendee/profile_page.dart';
+
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -42,7 +43,7 @@ class _MyHomePageState extends State<BottomNavigation> {
     /// widget list
     final List<Widget> bottomBarPages = [
       HomePage(controller: _controller),
-      const MyEventsPage(),
+      const MyEventPage(),
       const NotificationPage(),
       const ProfilePage(),
     ];

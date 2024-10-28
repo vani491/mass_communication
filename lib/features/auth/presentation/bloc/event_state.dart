@@ -20,3 +20,4 @@ class EventLoadSuccess extends EventState {
 }
 
 class EventLoadFailure extends EventState {}
+

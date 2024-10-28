@@ -2,13 +2,15 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../data/datasources/event_datasource.dart';
-import '../../data/repositories/event_repository_impl.dart';
-import '../../domain/usecases/get_events.dart';
-import '../bloc/event_bloc.dart';
-import '../bloc/event_event.dart';
-import '../bloc/event_state.dart';
-import '../widgets/event_list_item.dart';
+import 'package:mass_communication/core/user_preference.dart';
+import 'package:mass_communication/features/auth/domain/usecases/get_registered_event.dart';
+import '../../../data/datasources/event_datasource.dart';
+import '../../../data/repositories/event_repository_impl.dart';
+import '../../../domain/usecases/get_events.dart';
+import '../../bloc/event_bloc.dart';
+import '../../bloc/event_event.dart';
+import '../../bloc/event_state.dart';
+import '../../widgets/event_list_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
@@ -18,10 +20,10 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key, this.controller}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   late EventBloc _eventBloc;
 
   @override
@@ -36,9 +38,10 @@ class _HomePageState extends State<HomePage> {
     final eventDataSource = EventDataSourceImpl(firestore: FirebaseFirestore.instance);
     final eventRepository = EventRepositoryImpl(dataSource: eventDataSource);
     final getEvents = GetEvents(repository: eventRepository);
+    final getRegisteredEvents = GetRegisteredEvents(repository: eventRepository);
 
     // Initialize the EventBloc and add the LoadEventsEvent
-    _eventBloc = EventBloc(getEvents: getEvents)..add(LoadEventsEvent());
+    _eventBloc = EventBloc(getEvents: getEvents,getRegisteredEvents: getRegisteredEvents,)..add(LoadEventsEvent());
   }
 
   @override
@@ -76,10 +79,12 @@ class _HomePageState extends State<HomePage> {
                     month: DateFormat('MMMM').format(event.date), // Full month name
                     status: event.eventStatus,
                     eventName: event.name,
+                    eventId: event.eventId,
                     eventDescription: event.description,
                     eventType: event.eventType,
                     totalAttendees: event.totalAttendees.toString(),
                     location: event.location,
+                    isRegistered: event.isRegistered,
                   );
                 },
               );

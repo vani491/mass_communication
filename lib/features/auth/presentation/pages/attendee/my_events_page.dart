@@ -2,26 +2,30 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../data/datasources/event_datasource.dart';
-import '../../data/repositories/event_repository_impl.dart';
-import '../../domain/usecases/get_events.dart';
-import '../bloc/event_bloc.dart';
-import '../bloc/event_event.dart';
-import '../bloc/event_state.dart';
-import '../widgets/event_list_item.dart';
+import 'package:mass_communication/core/user_preference.dart';
+import 'package:mass_communication/features/auth/domain/usecases/get_registered_event.dart';
+import '../../../data/datasources/event_datasource.dart';
+import '../../../data/repositories/event_repository_impl.dart';
+import '../../../domain/usecases/get_events.dart';
+import '../../bloc/event_bloc.dart';
+import '../../bloc/event_event.dart';
+import '../../bloc/event_state.dart';
+import '../../widgets/event_list_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../widgets/my_event_list_item.dart';
 
-class OrganiserHomePage extends StatefulWidget {
+
+class MyEventPage extends StatefulWidget {
   final NotchBottomBarController? controller;
 
-  const OrganiserHomePage({Key? key, this.controller}) : super(key: key);
+  const MyEventPage({Key? key, this.controller}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  MyEventPageState createState() => MyEventPageState();
 }
 
-class _HomePageState extends State<OrganiserHomePage> {
+class MyEventPageState extends State<MyEventPage> {
   late EventBloc _eventBloc;
 
   @override
@@ -36,9 +40,10 @@ class _HomePageState extends State<OrganiserHomePage> {
     final eventDataSource = EventDataSourceImpl(firestore: FirebaseFirestore.instance);
     final eventRepository = EventRepositoryImpl(dataSource: eventDataSource);
     final getEvents = GetEvents(repository: eventRepository);
+    final getRegisteredEvents = GetRegisteredEvents(repository: eventRepository);
 
     // Initialize the EventBloc and add the LoadEventsEvent
-    _eventBloc = EventBloc(getEvents: getEvents)..add(LoadEventsEvent());
+    _eventBloc = EventBloc(getEvents: getEvents,getRegisteredEvents: getRegisteredEvents,)..add(LoadRegisteredEvents());
   }
 
   @override
@@ -54,9 +59,9 @@ class _HomePageState extends State<OrganiserHomePage> {
         backgroundColor: const Color(0xFF04224C),
         title: const Row(
           children: [
-            Icon(Icons.home_filled, size: 28, color: Colors.white),
+            Icon(Icons.star, size: 28, color: Colors.white),
             SizedBox(width: 10),
-            Text('Home', style: TextStyle(color: Colors.white)),
+            Text('My Events', style: TextStyle(color: Colors.white)),
           ],
         ),
       ),
@@ -71,15 +76,22 @@ class _HomePageState extends State<OrganiserHomePage> {
                 itemCount: state.events.length,
                 itemBuilder: (context, index) {
                   final event = state.events[index];
-                  return EventListItem(
+                  return MyEventListItem
+                    (
                     date: event.date.day.toString(),
                     month: DateFormat('MMMM').format(event.date), // Full month name
                     status: event.eventStatus,
                     eventName: event.name,
+                    eventId: event.eventId,
                     eventDescription: event.description,
                     eventType: event.eventType,
                     totalAttendees: event.totalAttendees.toString(),
                     location: event.location,
+                    isRegistered: event.isRegistered,
+                    organiserName: 'Shiv Prasad Verma',
+                    organiserContact: '9636854596',
+                    eventDuration: '6 Hours',
+                      startTime: '11:20 AM'
                   );
                 },
               );

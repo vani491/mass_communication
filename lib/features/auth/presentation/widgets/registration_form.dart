@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../reusable_widget/loading_indicator.dart';
 import '../../domain/usecases/register_user.dart';
 
-
 class RegistrationForm extends StatefulWidget {
-
   final RegisterUser registerUser;
 
   const RegistrationForm({super.key, required this.registerUser});
@@ -125,7 +123,6 @@ class RegistrationFormState extends State<RegistrationForm> {
     }
   }
 
-
   // Method to show loading indicator
   void _showLoadingIndicator() {
     showDialog(
@@ -147,12 +144,13 @@ class RegistrationFormState extends State<RegistrationForm> {
         content: Row(
           children: [
             Icon(Icons.check_circle, color: Colors.white),
-            SizedBox(width: 10),  // Spacing between icon and text
+            SizedBox(width: 10), // Spacing between icon and text
             Text('User registered successfully'),
           ],
         ),
-        backgroundColor: Colors.green,  // Green background color for success
-        behavior: SnackBarBehavior.floating,  // Optional: Make the snackbar floating
+        backgroundColor: Colors.green, // Green background color for success
+        behavior:
+            SnackBarBehavior.floating, // Optional: Make the snackbar floating
       ),
     );
   }
@@ -217,10 +215,10 @@ class RegistrationFormState extends State<RegistrationForm> {
                 onChanged: (value) {
                   _name = value;
                   if (!_isNameValid) {
-                    _resetErrorState('name');  // Reset error state outside build method
+                    _resetErrorState(
+                        'name'); // Reset error state outside build method
                   }
                 },
-
                 onSaved: (value) {
                   _name = value ?? '';
                 },
@@ -243,7 +241,6 @@ class RegistrationFormState extends State<RegistrationForm> {
                     _resetErrorState('mobile');
                   }
                 },
-
                 onSaved: (value) {
                   _mobileNumber = value ?? '';
                 },
@@ -266,7 +263,6 @@ class RegistrationFormState extends State<RegistrationForm> {
                     _resetErrorState('email');
                   }
                 },
-
                 onSaved: (value) {
                   _email = value ?? '';
                 },
@@ -289,7 +285,6 @@ class RegistrationFormState extends State<RegistrationForm> {
                     _resetErrorState('password');
                   }
                 },
-
                 onSaved: (value) {
                   _password = value ?? '';
                 },
@@ -299,13 +294,13 @@ class RegistrationFormState extends State<RegistrationForm> {
               // Role Selection Section in the RegistrationForm
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: Text(
-                  'Register as:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                child: Text('Register as:',
+                    style: TextStyle(fontWeight: FontWeight.bold,  fontFamily: 'Roboto'),
+                   ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,  // Evenly distribute the radio buttons
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // Evenly distribute the radio buttons
                 children: [
                   // Custom Container for Attendee
                   Flexible(
@@ -323,7 +318,12 @@ class RegistrationFormState extends State<RegistrationForm> {
                             groupValue: _selectedRole,
                             onChanged: _handleRoleChange,
                           ),
-                          const Text('Attendee'),
+                          const Text(
+                            'Attendee',
+                            style: TextStyle(
+                                fontFamily: 'Roboto' // Make the text bold
+                                ),
+                          ),
                         ],
                       ),
                     ),
@@ -348,7 +348,12 @@ class RegistrationFormState extends State<RegistrationForm> {
                             groupValue: _selectedRole,
                             onChanged: _handleRoleChange,
                           ),
-                          const Text('Organizer'),
+                          const Text(
+                            'Organizer',
+                            style: TextStyle(
+                                fontFamily: 'Roboto' // Make the text bold
+                                ),
+                          ),
                         ],
                       ),
                     ),
@@ -356,25 +361,25 @@ class RegistrationFormState extends State<RegistrationForm> {
                 ],
               ),
 
-
-
               const SizedBox(height: 30),
 
               // Submit Button
               ElevatedButton(
                 onPressed: _submit,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF04224C), // Custom button color
+                  backgroundColor: const Color(0xFF04224C),
+                  // Custom button color
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   textStyle: const TextStyle(fontSize: 16),
                 ),
                 child: Text(
                   'Register'.toUpperCase(),
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white, // Set text color to white
-                    fontWeight: FontWeight.bold, // Make the text bold
-                  ),
+                      fontSize: 16,
+                      color: Colors.white, // Set text color to white
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto' // Make the text bold
+                      ),
                 ),
               ),
             ],
