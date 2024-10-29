@@ -88,10 +88,10 @@ class MyEventPageState extends State<MyEventPage> {
                     totalAttendees: event.totalAttendees.toString(),
                     location: event.location,
                     isRegistered: event.isRegistered,
-                    organiserName: 'Shiv Prasad Verma',
-                    organiserContact: '9636854596',
-                    eventDuration: '6 Hours',
-                      startTime: '11:20 AM'
+                    organiserName: event.organiserName,
+                    organiserContact: event.organiserContact,
+                    eventDuration: '${event.eventDuration} Hours',
+                    startTime: event.startTime
                   );
                 },
               );

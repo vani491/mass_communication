@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mass_communication/core/utils.dart';
 import '../../domain/usecases/register_event_use_case.dart';
+import '../bloc/event_bloc.dart';
+import '../bloc/event_event.dart';
 import '../pages/organiser/event_create_page.dart';
+import '../pages/organiser/event_update_page.dart';
 
 // Main Event List Item Widget
 class OrganiserEventListItem extends StatefulWidget {
@@ -15,7 +19,12 @@ class OrganiserEventListItem extends StatefulWidget {
   final String eventType;
   final String totalAttendees;
   final String location;
+  final int capacity;
+  final DateTime eventDate;
   final bool isRegistered;
+  final TimeOfDay startTime;
+  final TimeOfDay endTime;
+  final DateTime registrationDeadline;
 
   const OrganiserEventListItem({
     super.key,
@@ -28,7 +37,8 @@ class OrganiserEventListItem extends StatefulWidget {
     required this.eventType,
     required this.totalAttendees,
     required this.location,
-    required this.isRegistered,
+    required this.capacity,
+    required this.isRegistered, required this.eventDate, required this.startTime, required this.endTime, required this.registrationDeadline,
   });
 
   @override
@@ -83,18 +93,33 @@ class OrganiserEventListItemState extends State<OrganiserEventListItem> {
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EventCreatePage(
+                        builder: (context) => EventUpdatePage(
                           key: widget.key,
                           controller: null,
-
+                          eventId: widget.eventId,
+                          eventName: widget.eventName,
+                          eventDescription: widget.eventDescription,
+                          eventType: widget.eventType,
+                          location: widget.location,
+                          capacity: widget.capacity, // Ensure you have correct capacity value
+                          selectedDate: widget.eventDate,
+                          startTime: widget.startTime,
+                          endTime: widget.endTime,
+                          registrationDeadline: widget.registrationDeadline,
                         ),
                       ),
                     );
+
+                    // If result is true, refresh the event list
+                    if (result == true) {
+                      BlocProvider.of<EventBloc>(context).add(LoadEventsEvent());
+                    }
                   },
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     // Button color

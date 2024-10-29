@@ -13,6 +13,13 @@ class EventModel extends Event {
     required int totalAttendees,
     required String eventStatus,
     required bool isRegistered,
+    required int capacity,
+    required String startTime,
+    required String endTime,
+    required DateTime registrationDeadline,
+    required String organiserName,
+    required String organiserContact,
+    required int eventDuration,
   }) : super(
     eventId: eventId,
     name: name,
@@ -22,7 +29,14 @@ class EventModel extends Event {
     location: location,
     totalAttendees: totalAttendees,
     eventStatus: eventStatus,
-    isRegistered: isRegistered
+    isRegistered: isRegistered,
+    capacity: capacity,
+    startTime: startTime,
+    endTime: endTime,
+    registrationDeadline: registrationDeadline,
+    organiserName: organiserName,
+    organiserContact: organiserContact,
+    eventDuration: eventDuration,
   );
 
 
@@ -38,6 +52,14 @@ class EventModel extends Event {
       location: data['Location'] ?? '',
       eventStatus: data['Status'] ?? '',
       isRegistered: data['Is_Registered'] is bool ? data['Is_Registered'] : false,
+      capacity: data['Capacity'] ?? 0,
+      startTime: data['Start_Time'] ?? '',
+      endTime: data['End_Time'] ?? '',
+      registrationDeadline: (data['Registration_Deadline'] as Timestamp).toDate(),
+      organiserName: data['Organizer_Name'] ?? '',
+      organiserContact: data['Organizer_Contact'] ?? '',
+      eventDuration: data['Duration'] ?? 0,
+
     );
   }
 

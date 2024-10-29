@@ -8,6 +8,13 @@ class Event {
   final int totalAttendees;
   final String eventStatus;
   bool isRegistered;
+  final int capacity;
+  final String startTime;
+  final String endTime;
+  final DateTime registrationDeadline;
+  final String organiserName;
+  final String organiserContact;
+  final int eventDuration;
 
   Event({
     required this.eventId,
@@ -19,5 +26,12 @@ class Event {
     required this.totalAttendees,
     required this.eventStatus,
     required this.isRegistered,
+    required this.capacity,
+    required this.startTime,
+    required this.endTime,
+    required this.registrationDeadline,
+    required this.organiserName,
+    required this.organiserContact,
+    required this.eventDuration,
   });
 }

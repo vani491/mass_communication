@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mass_communication/core/user_preference.dart';
 import 'package:mass_communication/features/auth/presentation/widgets/organiser_event_list_item.dart';
+import '../../../../../core/utils.dart';
 import '../../../data/datasources/event_datasource.dart';
 import '../../../data/repositories/event_repository_impl.dart';
 import '../../../domain/usecases/get_events.dart';
@@ -15,16 +16,16 @@ import '../../widgets/event_list_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class EventListPage extends StatefulWidget {
+class OrganiserEventListPage extends StatefulWidget {
   final NotchBottomBarController? controller;
 
-  const EventListPage({Key? key, this.controller}) : super(key: key);
+  const OrganiserEventListPage({Key? key, this.controller}) : super(key: key);
 
   @override
-  EventListState createState() => EventListState();
+  OrganiserEventListState createState() => OrganiserEventListState();
 }
 
-class EventListState extends State<EventListPage> {
+class OrganiserEventListState extends State<OrganiserEventListPage> {
   late EventBloc _eventBloc;
 
   @override
@@ -80,13 +81,17 @@ class EventListState extends State<EventListPage> {
                     month: DateFormat('MMMM').format(event.date), // Full month name
                     status: event.eventStatus,
                     eventName: event.name,
-                    eventId: event.eventId
-                    ,
+                    eventId: event.eventId,
                     eventDescription: event.description,
                     eventType: event.eventType,
                     totalAttendees: event.totalAttendees.toString(),
                     location: event.location,
                     isRegistered: event.isRegistered,
+                    capacity: event.capacity,
+                    eventDate: event.date,
+                    startTime: Util.stringToTimeOfDay(event.startTime),
+                    endTime: Util.stringToTimeOfDay(event.endTime),
+                    registrationDeadline: event.registrationDeadline,
                   );
                 },
               );

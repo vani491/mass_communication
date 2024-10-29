@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../features/auth/presentation/pages/attendee/my_events_page.dart';
 import '../features/auth/presentation/pages/attendee/notification_page.dart';
 import '../features/auth/presentation/pages/organiser/event_create_page.dart';
-import '../features/auth/presentation/pages/organiser/event_list.dart';
+import '../features/auth/presentation/pages/organiser/organiser_event_list.dart';
 import '../features/auth/presentation/pages/attendee/profile_page.dart';
 
 class OrganiserBottomNavigation extends StatefulWidget {
@@ -37,7 +37,7 @@ class _MyHomePageState extends State<OrganiserBottomNavigation> {
     final List<Widget> bottomBarPages = [
 
       EventCreatePage(controller: _controller),
-      const EventListPage(),
+      const OrganiserEventListPage(),
       const NotificationPage(),
       const ProfilePage(),
     ];

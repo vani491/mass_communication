@@ -1,6 +1,7 @@
 // util.dart
 // Utility class to include various helper methods
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../reusable_widget/loading_indicator.dart';
 
@@ -31,5 +32,18 @@ class Util {
       },
     );
   }
+
+  // Convert TimeOfDay to String in "HH:mm" format
+  static String timeOfDayToString(TimeOfDay time) {
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+  }
+  // Convert String in "HH:mm" format to TimeOfDay
+  static TimeOfDay stringToTimeOfDay(String timeString) {
+    List<String> parts = timeString.split(':');
+    int hour = int.parse(parts[0]);
+    int minute = int.parse(parts[1]);
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+
 
 }
