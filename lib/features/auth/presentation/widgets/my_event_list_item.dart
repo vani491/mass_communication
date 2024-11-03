@@ -45,21 +45,23 @@ class MyEventListItem extends StatefulWidget {
 
 class MyEventListItemState extends State<MyEventListItem> {
   late bool isRegistered;
+  late int totalAttendees;
 
   @override
   void initState() {
     super.initState();
     // Initialize the local variable with the widget property
     isRegistered = widget.isRegistered;
+    totalAttendees = int.parse(widget.totalAttendees.toString());
   }
 
   // Method to handle event unregistration and provide feedback to the user
-  Future<void> _handleUnregistration(String eventId) async {
+  Future<void> _handleUnregistration(String eventId, String eventName) async {
     // Show loading indicator
     Util.showLoadingIndicator(context, "Unregistering...");
 
     final registerUseCase = UnregisterFromEventUseCase();
-    String result = await registerUseCase.unregister(eventId);
+    String result = await registerUseCase.unregister(eventId, eventName);
 
     // Dismiss loading indicator only if mounted
     if (mounted) {
@@ -79,6 +81,7 @@ class MyEventListItemState extends State<MyEventListItem> {
     if (result.contains('successful')) {
       setState(() {
         isRegistered = false;
+        totalAttendees = totalAttendees-1;
       });
     }
   }
@@ -135,7 +138,7 @@ class MyEventListItemState extends State<MyEventListItem> {
                                 size: 14, color: Color(0xDF538133)),
                             const SizedBox(width: 4),
                             Text(
-                              '${widget.eventType}',
+                              widget.eventType,
                               style: const TextStyle(
                                   fontSize: 12,
                                   color: Color(0xDF3B5D23),
@@ -213,7 +216,7 @@ class MyEventListItemState extends State<MyEventListItem> {
                                     size: 16, color: Colors.orange[800]),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '${widget.totalAttendees} Attendees',
+                                  '${totalAttendees.toString()} Attendees',
                                   style: TextStyle(
                                       fontSize: 13,
                                       color: Colors.orange[900],
@@ -266,7 +269,7 @@ class MyEventListItemState extends State<MyEventListItem> {
                   ElevatedButton(
                     onPressed: isRegistered
                         ? () async {
-                            await _handleUnregistration(widget.eventId);
+                            await _handleUnregistration(widget.eventId, widget.eventName);
                           }
                         : null,
                     style: ElevatedButton.styleFrom(

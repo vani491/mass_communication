@@ -32,8 +32,11 @@ class AddEvent {
     String? organizerContact = UserPreferences.getMobileNumber();
     String? organizerId = UserPreferences.getUserId();
     String? organizerName = UserPreferences.getUserName();
+    String? fcmToken = UserPreferences.getUserFCMToken();
+
     // Construct event data object
     final eventData = {
+      'token': fcmToken ?? '',
       'Capacity': capacity,
       'Created_At':  FieldValue.serverTimestamp(),
       'Description': description,

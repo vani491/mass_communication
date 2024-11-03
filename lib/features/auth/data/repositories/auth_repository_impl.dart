@@ -18,6 +18,7 @@ import 'package:firebase_auth/firebase_auth.dart';
      required String email,
      required String password,
      required String role,
+     required String token,
    }) async {
      try {
        // 1. Register user with email & password using Firebase Auth
@@ -31,13 +32,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
        // 3. Store additional user information (name, mobileNumber) in Firestore
        await _firestore.collection('users').doc(uid).set({
-         'User Name': name,
-         'Mobile Number': mobileNumber,
-         'Email': email,
-         'Id': uid,
-         'Created At': FieldValue.serverTimestamp(),
-         'Password' : password,
-         'Role': role
+         'userName': name,
+         'mobileNumber': mobileNumber,
+         'email': email,
+         'userId': uid,
+         'createdAt': FieldValue.serverTimestamp(),
+         'password' : password,
+         'role': role,
+         'token': token
 
        });
      } on FirebaseAuthException catch (e) {

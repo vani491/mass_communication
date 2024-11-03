@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mass_communication/core/utils.dart';
 import '../../../../core/user_preference.dart';
-import '../../data/repositories/updaet_event_repository.dart';
+import '../../data/repositories/update_event_repository.dart';
 
 
 class UpdateEvent {

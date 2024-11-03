@@ -14,7 +14,7 @@ class RegisterForEventUseCase {
       // Retrieve user data from shared preferences
       String? userName = UserPreferences.getUserName();
       String? userId = UserPreferences.getUserId();
-
+      String? fcmToken = UserPreferences.getUserFCMToken();
       if (userName != null && userId != null) {
         // Prepare the registration data
         final registrationData = {
@@ -22,6 +22,7 @@ class RegisterForEventUseCase {
           'eventName': eventName,
           'userName': userName,
           'userId': userId,
+          'token': fcmToken,
           'timestamp': FieldValue.serverTimestamp(), // Store registration time
         };
 

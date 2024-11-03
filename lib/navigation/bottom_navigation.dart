@@ -3,6 +3,7 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Import BlocProvider
+import 'package:mass_communication/core/user_preference.dart';
 import 'package:mass_communication/features/auth/presentation/pages/attendee/home_page.dart';
 import 'package:mass_communication/features/auth/presentation/bloc/event_bloc.dart';  // Import EventBloc
 import 'package:mass_communication/features/auth/presentation/bloc/event_event.dart';  // Import EventEvent
@@ -11,7 +12,7 @@ import 'package:mass_communication/features/auth/domain/usecases/get_events.dart
 import '../features/auth/data/datasources/event_datasource.dart';
 import '../features/auth/data/repositories/event_repository_impl.dart';
 import '../features/auth/presentation/pages/attendee/my_events_page.dart';
-import '../features/auth/presentation/pages/attendee/notification_page.dart';
+import '../features/auth/presentation/pages/attendee/notification_list_page.dart';
 import '../features/auth/presentation/pages/attendee/profile_page.dart';
 
 
@@ -40,11 +41,12 @@ class _MyHomePageState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
 
+    String? userId = UserPreferences.getUserId();
     /// widget list
     final List<Widget> bottomBarPages = [
       HomePage(controller: _controller),
       const MyEventPage(),
-      const NotificationPage(),
+      const NotificationPage(userId: "123456"),
       const ProfilePage(),
     ];
 

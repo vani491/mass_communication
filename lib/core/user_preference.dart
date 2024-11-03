@@ -30,4 +30,13 @@ class UserPreferences {
   static String? getUserId() {
     return _prefs?.getString('userId');
   }
+
+  static Future<void> storeUserFCMToken(String token) async {
+    await _prefs?.setString('fcmToken', token);
+  }
+
+  static String? getUserFCMToken() {
+    return _prefs?.getString('fcmToken');
+  }
+
 }

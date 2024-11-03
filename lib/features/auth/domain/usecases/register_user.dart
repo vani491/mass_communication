@@ -16,6 +16,7 @@ class RegisterUser {
     required String email,
     required String password,
     required String role,
+    required String token,
   }) async {
     await authRepository.registerUser(
       name: name,
@@ -23,6 +24,7 @@ class RegisterUser {
       email: email,
       password: password,
       role:role,
+      token:token,
     );
   }
 }
