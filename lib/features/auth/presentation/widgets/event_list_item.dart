@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mass_communication/core/utils.dart';
 import '../../domain/usecases/register_event_use_case.dart';
+import '../bloc/event_bloc.dart';
+import '../bloc/event_event.dart';
 
 // Main Event List Item Widget
 class EventListItem extends StatefulWidget {
@@ -35,15 +38,12 @@ class EventListItem extends StatefulWidget {
 }
 
 class _EventListItemState extends State<EventListItem> {
-  late bool isRegistered;
-  late int totalAttendees;
+
 
   @override
   void initState() {
     super.initState();
-    // Initialize the local variable with the widget property
-    isRegistered = widget.isRegistered;
-    totalAttendees = int.parse(widget.totalAttendees.toString());
+
   }
 
   // Method to handle event registration and provide feedback to the user
@@ -71,10 +71,8 @@ class _EventListItemState extends State<EventListItem> {
 
     // Update registration status if successful
     if (result.contains('successful')) {
-      setState(() {
-        isRegistered = true;
-        totalAttendees = totalAttendees+1;
-      });
+      // Emit LoadEventsEvent to refresh the data in EventBloc after a registration
+      context.read<EventBloc>().add(LoadEventsEvent());
     }
   }
 
@@ -108,7 +106,7 @@ class _EventListItemState extends State<EventListItem> {
                       eventName: widget.eventName,
                       eventDescription: widget.eventDescription,
                       eventType: widget.eventType,
-                      totalAttendees: totalAttendees.toString(),
+                      totalAttendees: widget.totalAttendees,
                       location: widget.location,
                     ),
                   ),
@@ -119,14 +117,15 @@ class _EventListItemState extends State<EventListItem> {
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  onPressed: isRegistered
+                  onPressed: widget.isRegistered
                       ? null
                       : () async {
                           await _handleEventRegistration(
                               widget.eventId, widget.eventName);
                         },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isRegistered ? Colors.grey : Colors.green,
+                    backgroundColor:
+                        widget.isRegistered ? Colors.grey : Colors.green,
                     // Button color
                     padding: const EdgeInsets.only(
                         top: 0, bottom: 0, left: 12, right: 12),
@@ -135,7 +134,9 @@ class _EventListItemState extends State<EventListItem> {
                     ),
                   ),
                   child: Text(
-                    isRegistered ? 'Already Registered' : 'Register Here >>',
+                    widget.isRegistered
+                        ? 'Already Registered'
+                        : 'Register Here >>',
                     style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white,
@@ -273,12 +274,14 @@ class EventDetailsSection extends StatelessWidget {
               child: Text(
                 location,
                 style: const TextStyle(
-                    fontSize: 12, color: Color(0xFF3D3D3D), fontFamily: 'Roboto'),
+                    fontSize: 12,
+                    color: Color(0xFF3D3D3D),
+                    fontFamily: 'Roboto'),
                 maxLines: 2, // Limit to one line
-                overflow: TextOverflow.ellipsis, // Add ellipsis if the text overflows
+                overflow:
+                    TextOverflow.ellipsis, // Add ellipsis if the text overflows
               ),
             )
-
           ],
         ),
       ],

@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mass_communication/core/utils.dart';
 import '../../domain/usecases/register_event_use_case.dart';
 import '../../domain/usecases/unregister_event_use_case.dart';
+import '../bloc/event_bloc.dart';
+import '../bloc/event_event.dart';
 
 // Main Event List Item Widget
 class MyEventListItem extends StatefulWidget {
@@ -44,15 +47,11 @@ class MyEventListItem extends StatefulWidget {
 }
 
 class MyEventListItemState extends State<MyEventListItem> {
-  late bool isRegistered;
-  late int totalAttendees;
+
 
   @override
   void initState() {
     super.initState();
-    // Initialize the local variable with the widget property
-    isRegistered = widget.isRegistered;
-    totalAttendees = int.parse(widget.totalAttendees.toString());
   }
 
   // Method to handle event unregistration and provide feedback to the user
@@ -79,10 +78,7 @@ class MyEventListItemState extends State<MyEventListItem> {
 
     // Update registration status if successful
     if (result.contains('successful')) {
-      setState(() {
-        isRegistered = false;
-        totalAttendees = totalAttendees-1;
-      });
+      context.read<EventBloc>().add(LoadEventsEvent());
     }
   }
 
@@ -216,7 +212,7 @@ class MyEventListItemState extends State<MyEventListItem> {
                                     size: 16, color: Colors.orange[800]),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '${totalAttendees.toString()} Attendees',
+                                  '${widget.totalAttendees} Attendees',
                                   style: TextStyle(
                                       fontSize: 13,
                                       color: Colors.orange[900],
@@ -267,13 +263,13 @@ class MyEventListItemState extends State<MyEventListItem> {
                   ),
                   // Unregister Button
                   ElevatedButton(
-                    onPressed: isRegistered
+                    onPressed: widget.isRegistered
                         ? () async {
                             await _handleUnregistration(widget.eventId, widget.eventName);
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: isRegistered ? Colors.red : Colors.grey,
+                      backgroundColor: widget.isRegistered ? Colors.red : Colors.grey,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 24, vertical: 12),
                       shape: RoundedRectangleBorder(
