@@ -1,7 +1,10 @@
 // util.dart
 // Utility class to include various helper methods
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mass_communication/core/user_preference.dart';
 
 import '../reusable_widget/loading_indicator.dart';
 
@@ -44,6 +47,28 @@ class Util {
     int minute = int.parse(parts[1]);
     return TimeOfDay(hour: hour, minute: minute);
   }
+
+
+  static Future<String?> obtainAndStoreFCMToken() async {
+    final FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    try {
+      String? token = await messaging.getToken();
+
+      if (token != null) {
+        await UserPreferences.storeUserFCMToken(token);
+        print("FCM Token obtained and stored: $token");
+      } else {
+        print("FCM Token is null, could not obtain");
+      }
+
+      return token;
+    } catch (e) {
+      print("Error obtaining FCM Token: $e");
+      return null;
+    }
+  }
+
 
 
 }

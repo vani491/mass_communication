@@ -1,1 +1,38 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"smart-connect-58bff","appId":"1:261802239818:android:785bfb5355fc1ccb5bc3b3","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"smart-connect-58bff","configurations":{"android":"1:261802239818:android:785bfb5355fc1ccb5bc3b3","ios":"1:261802239818:ios:581bb6701b86f5105bc3b3","macos":"1:261802239818:ios:581bb6701b86f5105bc3b3","web":"1:261802239818:web:2d8e78f4b97dc9435bc3b3","windows":"1:261802239818:web:0f95477980ca0d1c5bc3b3"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "smart-connect-58bff",
+          "appId": "1:261802239818:android:785bfb5355fc1ccb5bc3b3",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "smart-connect-58bff",
+          "configurations": {
+            "android": "1:261802239818:android:785bfb5355fc1ccb5bc3b3",
+            "ios": "1:261802239818:ios:581bb6701b86f5105bc3b3",
+            "macos": "1:261802239818:ios:581bb6701b86f5105bc3b3",
+            "web": "1:261802239818:web:2d8e78f4b97dc9435bc3b3",
+            "windows": "1:261802239818:web:0f95477980ca0d1c5bc3b3"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}

@@ -13,8 +13,8 @@ class LoginUser {
       // 1. Query Firestore to check if the user with the given mobile number and password exists
       final querySnapshot = await _firestore
           .collection('users')
-          .where('Mobile Number', isEqualTo: mobileNumber)
-          .where('Password', isEqualTo: password)  // Assuming password is stored in Firestore
+          .where('mobileNumber', isEqualTo: mobileNumber)
+          .where('password', isEqualTo: password)  // Assuming password is stored in Firestore
           .limit(1)
           .get();
 
@@ -25,10 +25,10 @@ class LoginUser {
 
       // 3. User exists, extract the role from the Firestore document
       final userDoc = querySnapshot.docs.first;
-      final role = userDoc['Role'] as String;  // Assuming 'role' is stored as a string in Firestore
-      final userName = userDoc['User Name'] as String;  // Assuming 'Name' is stored as a string
-      final userMobileNumber = userDoc['Mobile Number'] as String;  // Assuming 'MobileNumber' is stored as a string
-      final userId = userDoc['Id'] as String;  // Assuming 'MobileNumber' is stored as a string
+      final role = userDoc['role'] as String;  // Assuming 'role' is stored as a string in Firestore
+      final userName = userDoc['userName'] as String;  // Assuming 'Name' is stored as a string
+      final userMobileNumber = userDoc['mobileNumber'] as String;  // Assuming 'MobileNumber' is stored as a string
+      final userId = userDoc['userId'] as String;  // Assuming 'MobileNumber' is stored as a string
 
       // Store extracted details in shared preferences
       await UserPreferences.storeUserData(userName, userMobileNumber, role,userId);

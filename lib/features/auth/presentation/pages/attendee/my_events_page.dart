@@ -37,13 +37,17 @@ class MyEventPageState extends State<MyEventPage> {
   }
 
   void _initializeEventBloc() {
-    final eventDataSource = EventDataSourceImpl(firestore: FirebaseFirestore.instance);
+    final eventDataSource = EventDataSourceImpl(
+        firestore: FirebaseFirestore.instance);
     final eventRepository = EventRepositoryImpl(dataSource: eventDataSource);
     final getEvents = GetEvents(repository: eventRepository);
-    final getRegisteredEvents = GetRegisteredEvents(repository: eventRepository);
+    final getRegisteredEvents = GetRegisteredEvents(
+        repository: eventRepository);
 
     // Initialize the EventBloc and add the LoadEventsEvent
-    _eventBloc = EventBloc(getEvents: getEvents,getRegisteredEvents: getRegisteredEvents,)..add(LoadRegisteredEvents());
+    _eventBloc =
+    EventBloc(getEvents: getEvents, getRegisteredEvents: getRegisteredEvents,)
+      ..add(LoadRegisteredEvents());
   }
 
   @override
@@ -72,31 +76,42 @@ class MyEventPageState extends State<MyEventPage> {
             if (state is EventLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is EventLoadSuccess) {
-              return ListView.builder(
-                itemCount: state.events.length,
-                itemBuilder: (context, index) {
-                  final event = state.events[index];
-                  return MyEventListItem
-                    (
-                    date: event.date.day.toString(),
-                    month: DateFormat('MMMM').format(event.date), // Full month name
-                    status: event.eventStatus,
-                    eventName: event.name,
-                    eventId: event.eventId,
-                    eventDescription: event.description,
-                    eventType: event.eventType,
-                    totalAttendees: event.totalAttendees.toString(),
-                    location: event.location,
-                    isRegistered: event.isRegistered,
-                    organiserName: event.organiserName,
-                    organiserContact: event.organiserContact,
-                    eventDuration: '${event.eventDuration} Hours',
-                    startTime: event.startTime
-                  );
-                },
-              );
+              if (state.events.isEmpty) {
+                // If there are no events, show a message
+                return const Center(
+                  child: Text(
+                    'No Event data found',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                );
+              } else {
+                return ListView.builder(
+                    itemCount: state.events.length,
+                    itemBuilder: (context, index) {
+                      final event = state.events[index];
+                      return MyEventListItem
+                        (
+                          date: event.date.day.toString(),
+                          month: DateFormat('MMMM').format(event.date),
+                          // Full month name
+                          status: event.eventStatus,
+                          eventName: event.name,
+                          eventId: event.eventId,
+                          eventDescription: event.description,
+                          eventType: event.eventType,
+                          totalAttendees: event.totalAttendees.toString(),
+                          location: event.location,
+                          isRegistered: event.isRegistered,
+                          organiserName: event.organiserName,
+                          organiserContact: event.organiserContact,
+                          eventDuration: '${event.eventDuration} Hours',
+                          startTime: event.startTime
+                      );
+                    }
+                );
+              }
             } else {
-              return const Center(child: Text('Failed to load events'));
+            return const Center(child: Text('Failed to load events'));
             }
           },
         ),

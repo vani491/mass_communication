@@ -7,19 +7,15 @@ import '../../data/repositories/event_unregister_repository.dart';
 class UnregisterFromEventUseCase {
   final EventUnregistrationRepository _repository = EventUnregistrationRepository();
 
-  Future<String> unregister(String eventId) async {
+  Future<String> unregister(String eventId,String eventName) async {
     try {
       // Retrieve user data from shared preferences
       String? userId = UserPreferences.getUserId();
 
       if (userId != null) {
         // Remove the registration data from Firestore via the repository
-        await _repository.removeEventRegistration(userId, eventId);
+        await _repository.removeEventRegistration(userId, eventId, eventName);
 
-        // Decrement the Attendee_Registered count in the events collection
-        await FirebaseFirestore.instance.collection('events').doc(eventId).update({
-          'Attendee_Registered': FieldValue.increment(-1),
-        });
         return 'Unregistration successful for event ID: $eventId';
       } else {
         return 'User information is missing. Please ensure you are logged in.';

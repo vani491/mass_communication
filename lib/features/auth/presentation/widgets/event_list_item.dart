@@ -36,12 +36,14 @@ class EventListItem extends StatefulWidget {
 
 class _EventListItemState extends State<EventListItem> {
   late bool isRegistered;
+  late int totalAttendees;
 
   @override
   void initState() {
     super.initState();
     // Initialize the local variable with the widget property
     isRegistered = widget.isRegistered;
+    totalAttendees = int.parse(widget.totalAttendees.toString());
   }
 
   // Method to handle event registration and provide feedback to the user
@@ -71,11 +73,7 @@ class _EventListItemState extends State<EventListItem> {
     if (result.contains('successful')) {
       setState(() {
         isRegistered = true;
-      });
-
-      // Increment Attendee_Registered in Firestore
-       await FirebaseFirestore.instance.collection('events').doc(widget.eventId).update({
-        'Attendee_Registered': FieldValue.increment(1),
+        totalAttendees = totalAttendees+1;
       });
     }
   }
@@ -110,7 +108,7 @@ class _EventListItemState extends State<EventListItem> {
                       eventName: widget.eventName,
                       eventDescription: widget.eventDescription,
                       eventType: widget.eventType,
-                      totalAttendees: widget.totalAttendees,
+                      totalAttendees: totalAttendees.toString(),
                       location: widget.location,
                     ),
                   ),
@@ -230,13 +228,11 @@ class EventDetailsSection extends StatelessWidget {
         // Event name with icon
         Row(
           children: [
-            const Icon(Icons.event, size: 20),
-            const SizedBox(width: 8),
             Text(
               eventName,
               style: const TextStyle(
                   fontSize: 17,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.normal,
                   fontFamily: 'Roboto'),
             ),
           ],

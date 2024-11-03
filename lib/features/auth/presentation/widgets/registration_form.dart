@@ -1,6 +1,7 @@
 //The form widget for user registration
 import 'package:flutter/material.dart';
 
+import '../../../../core/utils.dart';
 import '../../../../reusable_widget/loading_indicator.dart';
 import '../../domain/usecases/register_user.dart';
 
@@ -86,15 +87,21 @@ class RegistrationFormState extends State<RegistrationForm> {
   Future<void> _handleRegistration() async {
     // Show loading indicator
     _showLoadingIndicator();
-
+    String? token = await Util.obtainAndStoreFCMToken(); // Obtain and store the token
     try {
-      await widget.registerUser.call(
-        name: _name,
-        mobileNumber: _mobileNumber,
-        email: _email,
-        password: _password,
-        role: _selectedRole,
-      );
+      if (token != null) {
+        await widget.registerUser.call(
+          name: _name,
+          mobileNumber: _mobileNumber,
+          email: _email,
+          password: _password,
+          role: _selectedRole,
+          token: token, // Use the token obtained
+        );
+      } else {
+        throw Exception('Failed to get FCM Token');
+      }
+
 
       // Dismiss loading indicator only if mounted
       if (mounted) {
